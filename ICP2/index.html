@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js" type="application/javascript"></script>
+    <script src="http://code.angularjs.org/angular-1.1.1.min.js"></script>
+    <script src="http://cdn.static.runoob.com/libs/angular.js/1.4.6/angular.min.js"></script>
+
+</head>
+<body>
+<div ng-app="weather" ng-controller="weatherctrl">
+    State&nbsp<input type="text"  ng-model="startlocation" id="startlocation"/><br/>
+    City&nbsp&nbsp&nbsp<input type="text"  ng-model="endlocation" id="endlocation" /><br/>
+    <button id="btn" ng-click="getWeather()"> Show Weather </button>
+    <br/>
+    <br/>
+    <h2>The Weather in {{startlocation}}, {{endlocation}} is</h2>
+    <br/>
+    Weather: <input type="text" id="weather"><br/><br/>
+    Temp: <input type="text" id="temp">F
+    
+    <div class="weatherModule">
+        <p class="currentConditions" ng-bind-html-unsafe="currentweather.html"></p>
+        <div class="currentIcon" ng-bind-html-unsafe="currentIcon.html"></div>
+    </div>
+</div>
+
+</body>
+<script>
+    angular.module('weather', [])
+        .controller('weatherctrl', function($scope, $http) {
+
+            $scope.getWeather = function() {
+                var a=document.getElementById('startlocation').value;
+                var b=document.getElementById('endlocation').value;
+                $http.get('https://api.wunderground.com/api/36b799dc821d5836/conditions/q/'+a+'/'+b+'.json').success(function(data) {
+                    console.log(data);
+                    temp = data.current_observation.temp_f;
+                    weather = data.current_observation.weather;
+                    document.getElementById('weather').value=weather;
+                    document.getElementById('temp').value=temp;
+                    
+                })
+            }
+        });
+
+</script>
+</html>
